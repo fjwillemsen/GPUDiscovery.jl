@@ -1,3 +1,6 @@
+[![Build Status](https://github.com/fjwillemsen/GPUDiscovery.jl/actions/workflows/Test.yml/badge.svg)](https://github.com/fjwillemsen/GPUDiscovery.jl/actions/workflows/Test.yml)
+<!-- [![Downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fjuliapkgstats.com%2Fapi%2Fv1%2Fmonthly_downloads%2FGPUDiscovery&query=total_requests&suffix=%2Fmonth&label=Downloads)](https://juliapkgstats.com/pkg/GPUDiscovery) -->
+
 # GPUDiscovery.jl
 
 Tired of manually adjusting which backend and array type your Julia kernels use when switching GPUs?
