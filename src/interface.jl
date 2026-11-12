@@ -41,7 +41,7 @@ function _ensure_loaded(p::Platform, autoload::Bool, what)
 end
 
 """
-    devices(p::Platform=detect(); query=:auto) -> Vector{DeviceInfo}
+    list_devices(p::Platform=detect(); query=:auto) -> Vector{DeviceInfo}
 
 List the devices of platform `p`.
 
@@ -51,7 +51,7 @@ List the devices of platform `p`.
   the most complete [`DeviceInfo`](@ref);
 - `:system`: only use operating-system tools, never touching the vendor package.
 """
-function devices(p::Platform=detect(); query::Symbol=:auto)
+function list_devices(p::Platform=detect(); query::Symbol=:auto)
     query in (:auto, :package, :system) || throw(ArgumentError("`query` must be :auto, :package or :system, got :$query"))
     (p isa CPUPlatform || query === :system) && return system_devices(p)
     query === :package && load(p)
@@ -91,7 +91,7 @@ end
 """
     select_device!(p::Platform, index::Integer; autoload=true)
 
-Make device number `index` (1-based, as in [`devices`](@ref)) the active device for the current
+Make device number `index` (1-based, as in [`list_devices`](@ref)) the active device for the current
 task. A no-op for the CPU.
 """
 select_device!(::CPUPlatform, index::Integer; autoload::Bool=true) =

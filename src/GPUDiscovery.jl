@@ -7,7 +7,7 @@ its devices through one interface, without depending on any GPU package.
 ```julia
 using GPUDiscovery
 platform = detect()          # e.g. CUDAPlatform(); errors if several GPU platforms are present
-devices(platform)            # Vector{DeviceInfo}
+list_devices(platform)            # Vector{DeviceInfo}
 ```
 
 Detection only uses the operating system (sysfs, `nvidia-smi`, ...). Richer device details, the
@@ -18,7 +18,7 @@ hard dependencies.
 """
 module GPUDiscovery
 
-export detect, detect_all, devices, DeviceInfo, ka_backend, arraytype, select_device!
+export detect, detect_all, list_devices, DeviceInfo, ka_backend, arraytype, select_device!
 export CUDAPlatform, ROCmPlatform, oneAPIPlatform, MetalPlatform, CPUPlatform
 
 include("platforms.jl")

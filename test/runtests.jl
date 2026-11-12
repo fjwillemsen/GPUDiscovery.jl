@@ -41,13 +41,13 @@ using Aqua
         end
     end
 
-    @testset "devices (system)" begin
-        cpu = only(devices(CPUPlatform()))
+    @testset "list_devices (system)" begin
+        cpu = only(list_devices(CPUPlatform()))
         @test cpu.index == 1
         @test cpu.compute_units == Sys.CPU_THREADS
         @test cpu.total_memory > 0
         for p in detect_all()
-            devs = devices(p; query=:system)
+            devs = list_devices(p; query=:system)
             @test !isempty(devs)
             @test all(d -> d.platform === p && d.source === :system, devs)
             @test [d.index for d in devs] == 1:length(devs)
@@ -57,10 +57,10 @@ using Aqua
     end
 
     # Package-level queries; only run when the vendor package is installed in the test environment.
-    @testset "devices (package)" begin
+    @testset "list_devices (package)" begin
         for p in detect_all()
             Base.find_package(package_name(p)) === nothing && continue
-            devs = devices(p; query=:package)
+            devs = list_devices(p; query=:package)
             @test is_loaded(p)
             @test all(d -> d.source === :package, devs)
             @test all(d -> d.max_threads_per_block !== nothing && d.max_threads_per_block > 0, devs)

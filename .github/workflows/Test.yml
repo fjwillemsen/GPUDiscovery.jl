@@ -79,4 +79,8 @@ jobs:
               Base.get_extension(GPUDiscovery, ext) === nothing && error("$ext did not load")
               println("✓ ", ext)
           end
-          println(detect(), " => ", devices(detect()))
+          # every export must stay usable unqualified next to the vendor packages
+          clashes = [n for n in names(GPUDiscovery) if n !== :GPUDiscovery && !isdefined(Main, n)]
+          isempty(clashes) || error("Exports clash with a vendor package: $clashes")
+          p = detect()
+          println(p, " => ", list_devices(p))

@@ -6,7 +6,7 @@ Details about one device. Fields that could not be determined are `nothing`.
 | field                   | meaning                                                                 |
 |:------------------------|:------------------------------------------------------------------------|
 | `platform`              | the [`Platform`](@ref) the device belongs to                            |
-| `index`                 | 1-based position in `devices(platform)`, accepted by [`select_device!`](@ref) |
+| `index`                 | 1-based position in `list_devices(platform)`, accepted by [`select_device!`](@ref) |
 | `name`                  | marketing name, e.g. `"NVIDIA A100-SXM4-40GB"`                          |
 | `total_memory`          | device memory in bytes (unified memory for Apple Silicon and the CPU)   |
 | `max_threads_per_block` | maximum threads per block / workgroup / threadgroup                     |
