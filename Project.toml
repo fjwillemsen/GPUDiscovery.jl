@@ -1,0 +1,35 @@
+name = "GPUDiscovery"
+uuid = "35fe4fa7-061b-484d-9f7a-b826fc0781f2"
+version = "0.1.0"
+authors = ["Floris-Jan Willemsen <6725103+fjwillemsen@users.noreply.github.com>"]
+
+[weakdeps]
+AMDGPU = "21141c5a-9bdb-4563-92ae-f87d6854732e"
+CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+KernelAbstractions = "63c18a36-062a-441e-b654-da1e3ab1ce7c"
+Metal = "dde4c033-4e86-420c-a63e-0dd931031962"
+oneAPI = "8f75cd03-7ff8-4ecb-9b8f-daf728133b1b"
+
+[extensions]
+GPUDiscoveryAMDGPUExt = "AMDGPU"
+GPUDiscoveryCUDAExt = "CUDA"
+GPUDiscoveryKernelAbstractionsExt = "KernelAbstractions"
+GPUDiscoveryMetalExt = "Metal"
+GPUDiscoveryoneAPIExt = "oneAPI"
+
+[compat]
+AMDGPU = "1, 2"
+Aqua = "0.8"
+CUDA = "5, 6"
+KernelAbstractions = "0.9, 0.10"
+Metal = "1"
+oneAPI = "2"
+Test = "1"
+julia = "1.10"
+
+[extras]
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Aqua", "Test"]

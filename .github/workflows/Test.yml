@@ -1,0 +1,82 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - 'examples/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/CD.yml'
+      - '.github/workflows/TagBot.yml'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'README.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - 'examples/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/CD.yml'
+      - '.github/workflows/TagBot.yml'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'README.md'
+jobs:
+  test:
+    timeout-minutes: 20
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        julia-version: ['1.10', '1.11', '1.12', '1.13']
+        os: [ubuntu-latest, macos-latest]
+    
+    steps:
+      - uses: actions/checkout@v7
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: ${{ matrix.julia-version }}
+      - uses: julia-actions/cache@v3
+      - uses: julia-actions/julia-runtest@v1
+
+  # The GPU packages are not test dependencies, so the test suite never loads the extensions.
+  # This job checks that every extension still loads (no GPU needed) against the latest
+  # versions of the GPU packages.
+  extensions:
+    timeout-minutes: 30
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            packages: 'CUDA AMDGPU oneAPI KernelAbstractions'
+          - os: macos-latest
+            packages: 'Metal KernelAbstractions'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: '1'
+      - uses: julia-actions/cache@v3
+      - name: Load extensions
+        shell: julia --color=yes {0}
+        env:
+          PACKAGES: ${{ matrix.packages }}
+        run: |
+          using Pkg
+          Pkg.activate(; temp=true)
+          Pkg.develop(path=".")
+          pkgs = String.(split(ENV["PACKAGES"]))
+          Pkg.add(pkgs)
+          using GPUDiscovery
+          for pkg in pkgs
+              @eval using $(Symbol(pkg))
+              ext = Symbol("GPUDiscovery", pkg, "Ext")
+              Base.get_extension(GPUDiscovery, ext) === nothing && error("$ext did not load")
+              println("✓ ", ext)
+          end
+          println(detect(), " => ", devices(detect()))
